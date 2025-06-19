@@ -10,7 +10,7 @@ CREATE TABLE movie (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     overview VARCHAR(500),
-    vote_average BIGINT,
+    vote_average DECIMAL(10, 1),
     poster_path VARCHAR(255),
     backdrop_path VARCHAR(255),
     release_date VARCHAR(100),
@@ -43,7 +43,7 @@ CREATE TABLE movie_directors (
 
 CREATE TABLE transaction_detail (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100)
+  seat VARCHAR(100)
 );
 
 CREATE TABLE payment_method (
