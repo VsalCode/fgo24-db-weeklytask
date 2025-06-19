@@ -16,10 +16,10 @@ erDiagram
     boolean is_admin
   }
 
-  movie ||--o{ movie_genre : "has"
-  movie ||--o{ movie_director : "has"
-  movie ||--o{ movie_cast : "has"
-  movie ||--o{ transaction : "purchased"
+  movie ||--o{ movie_genres : "has"
+  movie ||--o{ movie_directors : "has"
+  movie ||--o{ movie_casts : "has"
+  movie ||--o{ transactions : "purchased"
   movie {
     int id PK
     string title
@@ -33,63 +33,71 @@ erDiagram
     int admin_id FK
   }
 
-  movie_genre {
+  movie_genres }o--|| genre : "categorized"
+  movie_genres {
     int id PK
     int movie_id FK
     int genre_id FK
   }
 
-  genre ||--o{ movie_genre : "categorized"
   genre {
     int id PK
     string name
   }
 
-  movie_director {
+  movie_directors }o--|| director : "directed by"
+  movie_directors {
     int id PK
     int movie_id FK
     int director_id FK
   }
 
-  director ||--o{ movie_director : "directs"
   director {
     int id PK
     string name
   }
 
-  movie_cast {
+  movie_casts }o--|| cast : "acts by"
+  movie_casts {
     int id PK
     int movie_id FK
     int cast_id FK
   }
 
-  cast ||--o{ movie_cast : "acts"
   cast {
     int id PK
     string name
   }
-
-  transaction {
+ 
+  transactions {
     int id PK
-    int movie_id FK
-    int history_booking_id FK
-  }
-
-  history_booking ||--o{ transaction : "contains"
-  history_booking {
-    int id PK
+    string buyer_fullname
+    string buyer_email
+    int buyer_phone
     string cinema
     string location
     timestamp date
     timestamp time
     int amount
-    string seat
-    is_paid boolean
-    string payment_method
     int user_id FK
+    int movie_id FK
+    int transaction_detail FK 
+    int payment_method_id FK
   }
 
-  user ||--o{ history_booking : "makes"
+  transaction_detail }o--|| transactions: "contains"
+  transaction_detail {
+    int id PK
+    string seat
+  }
+
+  payment_method }o--|| transactions: "contains"
+  payment_method {
+    string id PK
+    string name
+  }
+
+  user ||--o{ transactions : "makes"
   user ||--o{ session : "has"
   user {
     int id PK
