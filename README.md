@@ -33,7 +33,7 @@ erDiagram
     int admin_id FK
   }
 
-  movie_genres }o--|| genre : "categorized"
+  movie_genres ||--o{ genre : "categorized"
   movie_genres {
     int id PK
     int movie_id FK
