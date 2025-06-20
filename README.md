@@ -13,7 +13,6 @@ erDiagram
     int id PK
     string email
     string password
-    boolean is_admin
   }
 
   movie ||--o{ movie_genres : "has"
@@ -33,60 +32,41 @@ erDiagram
     int admin_id FK
   }
 
-  movie_genres ||--o{ genre : "categorized"
+  genres {
+    int id PK
+    string name
+  }
+
+  movie_genres }o--|| genres : "categorized"
   movie_genres {
-    int id PK
-    int movie_id FK
-    int genre_id FK
+    int movie_id PK, FK
+    int genre_id PK, FK
   }
 
-  genre {
+  directors {
     int id PK
     string name
   }
 
-  movie_directors }o--|| director : "directed by"
+  movie_directors }o--|| directors : "directed by"
   movie_directors {
-    int id PK
-    int movie_id FK
-    int director_id FK
+    int movie_id PK, FK
+    int director_id PK, FK
   }
 
-  director {
+  casts {
     int id PK
     string name
   }
 
-  movie_casts }o--|| cast : "acts by"
+  movie_casts }o--|| casts : "acts by"
   movie_casts {
-    int id PK
-    int movie_id FK
-    int cast_id FK
+    int movie_id PK, FK
+    int cast_id PK, FK
   }
 
-  cast {
-    int id PK
-    string name
-  }
- 
-  transactions {
-    int id PK
-    string buyer_fullname
-    string buyer_email
-    int buyer_phone
-    string cinema
-    string location
-    timestamp date
-    timestamp time
-    int amount
-    int user_id FK
-    int movie_id FK
-    int transaction_detail FK 
-    int payment_method_id FK
-  }
-
-  transaction_detail }o--|| transactions: "contains"
-  transaction_detail {
+  transaction_details }o--|| transactions: "contains"
+  transaction_details {
     int id PK
     string seat
   }
@@ -96,10 +76,26 @@ erDiagram
     string id PK
     string name
   }
+ 
+  transactions {
+    int id PK
+    string customer_fullname
+    string customer_email
+    int customer_phone
+    int amount
+    string cinema
+    string location
+    timestamp time
+    timestamp date
+    int users_id FK
+    int movie_id FK
+    int transaction_details FK 
+    int payment_method_id FK
+  }
 
-  user ||--o{ transactions : "makes"
-  user ||--o{ session : "has"
-  user {
+  users ||--o{ transactions : "makes"
+  users ||--o{ session : "has"
+  users {
     int id PK
     string fullname
     string email
@@ -109,7 +105,7 @@ erDiagram
 
   session {
     int id PK
-    string user_id FK
+    string users_id FK
     timestamp created_at
   }
 ```

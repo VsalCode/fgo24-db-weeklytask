@@ -1,94 +1,96 @@
 -- Active: 1750128805513@@127.0.0.1@5432@postgres
+
 CREATE TABLE admin (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(100),
-  password VARCHAR(100),
-  is_admin BOOLEAN
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL 
 );
 
 CREATE TABLE movie (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
     overview VARCHAR(500),
-    vote_average DECIMAL(10, 1),
+    vote_average DECIMAL(3, 1), 
     poster_path VARCHAR(255),
     backdrop_path VARCHAR(255),
-    release_date VARCHAR(100),
-    runtime BIGINT,
-    popularity BIGINT,
-    admin_id BIGINT REFERENCES admin(id) 
+    release_date DATE, 
+    runtime BIGINT, 
+    popularity DECIMAL(10, 2), 
+    admin_id BIGINT REFERENCES admin(id) ON DELETE SET NULL ON UPDATE CASCADE 
 );
 
-CREATE TABLE genre (
+CREATE TABLE genres (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100)
+  name VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE movie_genres(
-  id SERIAL PRIMARY KEY,
-  genre_id BIGINT REFERENCES genre(id),
-  movie_id BIGINT REFERENCES movie(id)
+CREATE TABLE movie_genres (
+  genre_id BIGINT REFERENCES genres(id) ON DELETE CASCADE,
+  movie_id BIGINT REFERENCES movie(id) ON DELETE CASCADE,
+  PRIMARY KEY (genre_id, movie_id)
 );
 
-CREATE TABLE director (
+CREATE TABLE directors (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100)
+  name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE movie_directors (
-  id SERIAL PRIMARY KEY,
-  movie_id BIGINT REFERENCES movie(id),
-  director_id BIGINT REFERENCES director(id)
+  movie_id BIGINT REFERENCES movie(id) ON DELETE CASCADE,
+  director_id BIGINT REFERENCES directors(id) ON DELETE CASCADE,
+  PRIMARY KEY (movie_id, director_id)
 );
 
-CREATE TABLE transaction_detail (
+CREATE TABLE casts (
   id SERIAL PRIMARY KEY,
-  seat VARCHAR(100)
+  name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE movie_casts (
+  movie_id BIGINT REFERENCES movie(id) ON DELETE CASCADE,
+  cast_id BIGINT REFERENCES casts(id) ON DELETE CASCADE,
+  PRIMARY KEY (movie_id, cast_id)
 );
 
 CREATE TABLE payment_method (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100)
+  name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE transaction_detail (
+  id SERIAL PRIMARY KEY,
+  seat VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  fullname VARCHAR(100),
-  email VARCHAR(100),
-  password VARCHAR(100),
-  phone BIGINT
+  fullname VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone BIGINT,
+  password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,
-  buyer_fullname VARCHAR(100),
-  buyer_email VARCHAR(100),
-  buyer_phone INT,
-  cinema VARCHAR(100),
-  location VARCHAR(255),
-  date TIMESTAMP DEFAULT now(),
-  time TIMESTAMP DEFAULT now(),
-  amount BIGINT,
-  user_id BIGINT REFERENCES users(id),
-  movie_id BIGINT REFERENCES movie(id),
-  trx_detail_id BIGINT REFERENCES transaction_detail(id),
-  payment_method_id BIGINT REFERENCES payment_method(id)
+  customer_fullname VARCHAR(100) NOT NULL,
+  customer_email VARCHAR(100) NOT NULL UNIQUE,
+  customer_phone BIGINT, 
+  amount BIGINT NOT NULL, 
+  cinema VARCHAR(100) NOT NULL,
+  location VARCHAR(255) NOT NULL,
+  time TIME,
+  date DATE,
+  user_id BIGINT REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  movie_id BIGINT REFERENCES movie(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  payment_method_id BIGINT REFERENCES payment_method(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  trx_detail_id BIGINT REFERENCES transaction_detail(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE session (
   id SERIAL PRIMARY KEY,
-  user_id BIGINT REFERENCES users(id),
-  created_at TIMESTAMP DEFAULT now()
+  user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT now() NOT NULL
 );
 
-DROP TABLE admin;
-DROP TABLE movie;
-DROP TABLE genre;
-DROP TABLE movie_genres;
-DROP TABLE director;
-DROP TABLE movie_directors;
-DROP TABLE transaction_detail;
-DROP TABLE payment_method;
-DROP TABLE users;
-DROP TABLE transactions;
-DROP TABLE session;
+CREATE INDEX idx_movie_title ON movie(title);
+CREATE INDEX idx_users_email ON users(email);
