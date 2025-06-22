@@ -1,6 +1,6 @@
 # Database & PostgreSQL Weekly Task
 
-This project demonstrated how to create ERD with Schema Database with PostgreSQL for latest weelytask app / Cinevo: Movie Ticket Booking App built in with React JS
+This project demonstrates how to create ERD with Database Schema using PostgreSQL for the latest weelytask / Cinevo application: Movie Ticket Booking App built with React JS
 
 ### ERD Cinevo: Movie Ticket Booking App
 
@@ -26,7 +26,7 @@ erDiagram
     int vote_average
     string poster_path
     string backdrop_path
-    string release_date
+    date release_date
     int runtime
     int popularity
     int admin_id FK
@@ -39,8 +39,8 @@ erDiagram
 
   movie_genres }o--|| genres : "categorized"
   movie_genres {
-    int movie_id PK, FK
-    int genre_id PK, FK
+    int movie_id PK "FK"
+    int genre_id PK "FK"
   }
 
   directors {
@@ -50,8 +50,8 @@ erDiagram
 
   movie_directors }o--|| directors : "directed by"
   movie_directors {
-    int movie_id PK, FK
-    int director_id PK, FK
+    int movie_id PK "FK"
+    int director_id PK "FK"
   }
 
   casts {
@@ -61,19 +61,20 @@ erDiagram
 
   movie_casts }o--|| casts : "acts by"
   movie_casts {
-    int movie_id PK, FK
-    int cast_id PK, FK
+    int movie_id PK "FK"
+    int cast_id PK "FK"
   }
 
-  transaction_details }o--|| transactions: "contains"
+  transactions ||--o{ transaction_details : "contains"
   transaction_details {
     int id PK
     string seat
+    int transaction_id FK
   }
 
-  payment_method }o--|| transactions: "contains"
+  payment_method ||--o{ transactions : "used in"
   payment_method {
-    string id PK
+    int id PK
     string name
   }
  
@@ -81,15 +82,15 @@ erDiagram
     int id PK
     string customer_fullname
     string customer_email
-    int customer_phone
-    int amount
+    string customer_phone
+    decimal amount
     string cinema
     string location
-    timestamp time
-    timestamp date
+    time show_time
+    date show_date
+    timestamp created_at
     int users_id FK
     int movie_id FK
-    int transaction_details FK 
     int payment_method_id FK
   }
 
@@ -100,12 +101,12 @@ erDiagram
     string fullname
     string email
     string password
-    int phone
+    string phone
   }
 
   session {
     int id PK
-    string users_id FK
+    int users_id FK
     timestamp created_at
   }
 ```
