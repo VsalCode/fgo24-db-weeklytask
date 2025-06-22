@@ -1,80 +1,77 @@
-INSERT INTO admin(email, password, is_admin) VALUES(
-  ("admin@gmail.com", md5("admin#123"), true )
-);
+ Insert admin
+INSERT INTO admin (email, password) VALUES 
+('admin@cinevo.com', md5('admin123') );
 
-INSERT INTO movie(title, overview, vote_average, posterpath, backdrop_path, release_date, runtime, popularity ) VALUES(
-  (
-    "Pulp Fiction",
-    "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-    8.8,
-    "https://i.pinimg.com/736x/f0/01/3c/f0013ca4a05245afde43e0eaa7d1a2ce.jpg",
-    "https://i.pinimg.com/736x/43/70/21/437021bcb7bf907304d792753c703084.jpg",
-    1994,
-    154,
-    2300000
-  ),
-  (
-    "Dead Poets Society",
-    "Maverick teacher John Keating returns in 1959 to the prestigious New England boys' boarding school where he was once a star student, using poetry to embolden his pupils to new heights of self-expression.",
-    8.1,
-    "https://i.pinimg.com/736x/5a/fb/d1/5afbd1962d1360b2114227d918335439.jpg",
-    "",
-    1989,
-    128,
-    589000
-  ),
-  (
-    "A Separation",
-    "A married couple are faced with a difficult decision - to improve the life of their child by moving to another country or to stay in Iran and look after a deteriorating parent who has Alzheimer's disease.",
-    8.3,
-    "https://i.pinimg.com/736x/b7/ee/54/b7ee54b0a236e4aa88f7fca786153a20.jpg",
-    "",
-    2011,
-    123,
-    270000
-  ),
-  (
-    "Eternal Sunshine of the Spotless Mind",
-    "When their relationship turns sour, a couple undergoes a medical procedure to have each other erased from their memories forever.",
-    8.3,
-    "https://i.pinimg.com/736x/7d/6d/0e/7d6d0e163f18299c1bccb18edce7f3f5.jpg",
-    "",
-    2004,
-    108,
-    1100000
-  )
-);
+ Insert payment methods
+INSERT INTO payment_method (name) VALUES 
+('BRI'),
+('BCA'),
+('Mandiri'), 
+('OVO'),
+('DANA'),
+('GoPay');
 
-INSERT INTO director(name) VALUES (
-  ("Quentin Tarantino"),
-  ("Peter Weir"),
-  ("Asghar Farhadi"),
-  ("Michel Gondry")
-);
+ Insert genres
+INSERT INTO genres (name) VALUES 
+('Action'),
+('Adventure'),
+('Comedy'),
+('Drama'),
+('Horror'),
+('Romance'),
+('Sci-Fi'),
+('Thriller'),
+('Animation'),
+('Documentary');
 
-INSERT INTO genre(name) VALUES(
-  ("Crime"),
-  ("Drama"),
-  ("Romance")
-);
+ Insert directors
+INSERT INTO directors (name) VALUES 
+('Christopher Nolan'),
+('Steven Spielberg'),
+('Martin Scorsese'),
+('Quentin Tarantino'),
+('James Cameron');
 
-INSERT INTO payment_method(name) VALUES(
-  ("BCA"),
-  ("BRI"),
-  ("Dana"),
-  ("Gopay"),
-  ("OVO"),
-  ("VISA")
-);
+ Insert casts
+INSERT INTO casts (name) VALUES 
+('Leonardo DiCaprio'),
+('Robert Downey Jr.'),
+('Scarlett Johansson'),
+('Tom Hanks'),
+('Meryl Streep'),
+('Brad Pitt'),
+('Jennifer Lawrence'),
+('Will Smith');
 
-INSERT INTO users(fullname, email, password, phone) VALUES(
-  ("faisal", "faisal@mail.co", "fsl1919", 0811223344)
-);
+ Insert users
+INSERT INTO users (fullname, email, password, phone) VALUES 
+('John Doe', 'john.doe@email.com', 'hashed_password', '+6281234567890'),
+('Jane Smith', 'jane.smith@email.com', 'hashed_password', '+6281234567891'),
+('Bob Wilson', 'bob.wilson@email.com', 'hashed_password', '+6281234567892');
 
-INSERT into transactions(buyer_fullname, buyer_email, buyer_phone, cinema, location, amount) VALUES(
-  ("Rizki", "rizki@mail.co", 081247284, "ebv.id", 50000),
-);
+INSERT INTO movie (title, overview, vote_average, poster_path, backdrop_path, release_date, runtime, popularity, admin_id) VALUES 
+('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology...', 9, 'https://i.pinimg.com/736x/43/9a/1c/439a1c4583a953c26b63d08a1d832f53.jpg', 'https://i.pinimg.com/736x/a5/b5/b9/a5b5b93fea8d2040860e94eb3e768152.jpg', '2010-07-16', 148, 100, 1),
+('The Dark Knight', 'Batman begins his fight against crime in Gotham City...', 9, 'https://i.pinimg.com/736x/89/ee/d1/89eed179fdfab9dd116f31a3e12bb188.jpg', 'https://i.pinimg.com/736x/89/ee/d1/89eed179fdfab9dd116f31a3e12bb188.jpg', '2008-07-18', 152, 95, 1);
 
-INSERT INTO transaction_detail(seat) VALUES(
-  ('A12', 'A13')
-);
+INSERT INTO movie_genres (movie_id, genre_id) VALUES 
+(1, 1), (1, 7), (1, 8), 
+(2, 1), (2, 4), (2, 8); 
+
+INSERT INTO movie_directors (movie_id, director_id) VALUES 
+(1, 1), 
+(2, 1); 
+
+INSERT INTO movie_casts (movie_id, cast_id) VALUES 
+(1, 1), (1, 2), 
+(2, 1), (2, 4); 
+
+INSERT INTO transactions (customer_fullname, customer_email, customer_phone, amount, cinema, location, show_time, show_date, users_id, movie_id, payment_method_id) VALUES 
+('John Doe', 'john.doe@email.com', '+6281234567890', 50000.00, 'ebv.id', 'Jakarta', '19:30', '2025-06-25', 1, 1, 1);
+
+INSERT INTO transaction_details (seat, transaction_id) VALUES 
+('A1', 1),
+('A2', 1);
+
+INSERT INTO session (users_id, expires_at) VALUES 
+(1, CURRENT_TIMESTAMP + INTERVAL '24 hours'),
+(2, CURRENT_TIMESTAMP + INTERVAL '24 hours');
